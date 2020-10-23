@@ -4,7 +4,9 @@
   "description": "Hermes Event Processor",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "jest",
+    "test:watch": "npm t -- --watch",
+    "test:coverage": "npm t -- --collectCoverage",
     "prebuild:development": "rimraf ./dist",
     "prebuild:production": "rimraf ./dist",
     "build:development": "webpack --mode=development",
