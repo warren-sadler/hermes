@@ -10,7 +10,8 @@
     "prebuild:development": "rimraf ./dist",
     "prebuild:production": "rimraf ./dist",
     "build:development": "webpack --mode=development",
-    "build:production": "webpack --mode=production"
+    "build:production": "webpack --mode=production",
+    "release": "standard-version"
   },
   "keywords": [
     "event-processing",
@@ -23,17 +24,24 @@
     "ben.bowden@candidpartners.com",
     "warren.sadler@candidpartners.com"
   ],
-  "license": "GPL",
+  "husky": {
+    "hooks": {
+      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
+    }
+  },
+  "license": "MIT",
   "devDependencies": {
     "@commitlint/cli": "^11.0.0",
     "@commitlint/config-conventional": "^11.0.0",
     "@types/jest": "^26.0.15",
     "@types/node": "^14.14.2",
     "closure-webpack-plugin": "^2.3.0",
+    "cz-conventional-changelog": "^3.3.0",
     "google-closure-compiler": "^20201006.0.0",
     "husky": "^4.3.0",
     "jest": "^26.6.1",
     "rimraf": "^3.0.2",
+    "standard-version": "^9.0.0",
     "terser-webpack-plugin": "^4.2.3",
     "ts-jest": "^26.4.2",
     "ts-loader": "^8.0.6",
@@ -41,5 +49,10 @@
     "webpack": "v4.44.2",
     "webpack-cli": "^4.1.0",
     "webpack-merge": "^5.2.0"
+  },
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
+    }
   }
 }
