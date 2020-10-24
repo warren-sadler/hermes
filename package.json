@@ -17,7 +17,8 @@
     "build:development": "webpack --mode=development",
     "build:production": "webpack --mode=production",
     "prerelease": "npm-run-all lint test",
-    "release": "standard-version"
+    "release": "standard-version",
+    "generate-docs": "typedoc --out docs src"
   },
   "keywords": [
     "event-processing",
