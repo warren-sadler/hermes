@@ -1,0 +1,42 @@
+---
+resources:
+    - name: source-code
+      type: git
+      source:
+          uri: https://github.com/warren-sadler/hermes.git
+          branch: master
+jobs:
+    - name: compile-app
+      plan:
+          - get: source-code
+          - task: install-node-build-deps
+            config:
+                platform: linux
+                image_resource:
+                    type: docker-image
+                    source:
+                        repository: amazonlinux
+                inputs:
+                    - name: source-code
+                run:
+                    path: sh
+                    args:
+                        - ./source-code/scripts/install.sh
+    - name: inspect-app
+      plan:
+          - get: source-code
+            passed: [compile-app]
+            trigger: true
+          - task: first-task
+            config:
+                platform: linux
+                image_resource:
+                    type: docker-image
+                    source:
+                        repository: amazonlinux
+                inputs:
+                    - name: source-code
+                run:
+                    path: find
+                    args: [.]
+# fly -t h set-pipeline -c ./pipelines/test-pipeline.yml -p test-pipeline
