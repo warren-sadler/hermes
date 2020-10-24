@@ -1,0 +1,17 @@
+{
+  "name": "@hermes/adapter",
+  "version": "1.0.0",
+  "description": "",
+  "main": "lib/index",
+  "types": "lib/index",
+  "scripts": {
+    "build": "tsc"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/node": "^14.14.2",
+    "typescript": "^4.0.3"
+  }
+}
