@@ -18,8 +18,6 @@ jobs:
                         repository: amazonlinux
                 inputs:
                     - name: source-code
-                outputs:
-                    - name: image
                 run:
                     path: sh
                     args:
