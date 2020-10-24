@@ -8,20 +8,31 @@ describe('Adapters', () => {
     >
     const MockAdapter: MockAdapter = {
         name: Symbol('MockAdapter'),
-        getConnection(connection) {
+        async getConnection(connection) {
             return connection
         },
-        getMessages() {
+        async getMessages() {
             return []
+        },
+        async putMessages() {
+            return
+        },
+        async closeConnection() {
+            return
         },
     }
     const Adapters = registerAdapters(MockAdapter)
     test('Adapters require a getConnection method', () => {
         expect(MockAdapter).toHaveProperty('getConnection')
     })
-
-    test('getting messages from an adapter', () => {
-        expect(MockAdapter.getMessages({})).toStrictEqual([])
+    test('Adapters require a closeConnection method', () => {
+        expect(MockAdapter).toHaveProperty('closeConnection')
+    })
+    test('Adapters require a getMessages method', () => {
+        expect(MockAdapter).toHaveProperty('getMessages')
+    })
+    test('Adapters require a putMessages method', () => {
+        expect(MockAdapter).toHaveProperty('putMessages')
     })
 
     describe('Adapter Registery', () => {

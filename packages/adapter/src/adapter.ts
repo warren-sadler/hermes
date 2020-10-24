@@ -14,8 +14,13 @@ export interface Adapter<
     connectionParams?: ConnectionParams
     connection?: Connection
     name: symbol
-    getConnection(connectionParams: ConnectionParams): Connection
-    getMessages(connection: Connection): MessageType
+    getConnection(connectionParams: ConnectionParams): Promise<Connection>
+    getMessages(connection: Connection): Promise<MessageType>
+    putMessages(
+        connection: Connection,
+        ...messages: unknown[]
+    ): Promise<unknown>
+    closeConnection(connection: Connection): Promise<unknown>
 }
 
 interface AdapterRegistry<
@@ -29,8 +34,20 @@ interface AdapterRegistry<
     getConnection(
         adapter: AdapterType,
         connectionParams: ConnectionParams
-    ): Connection
-    getMessages(adapter: AdapterType, connection: Connection): MessageType
+    ): Promise<Connection>
+    getMessages(
+        adapter: AdapterType,
+        connection: Connection
+    ): Promise<MessageType>
+    putMessages(
+        adapter: AdapterType,
+        connection: Connection,
+        ...messages: unknown[]
+    ): Promise<unknown>
+    closeConnection(
+        adapter: AdapterType,
+        connection: Connection
+    ): Promise<unknown>
 }
 
 export const registerAdapters = <A extends Adapter>(
@@ -44,13 +61,22 @@ export const registerAdapters = <A extends Adapter>(
         getAdapter(adapter) {
             return this.registery.get(adapter.name)
         },
-        getConnection(adapter, connectionParams) {
+        async getConnection(adapter, connectionParams) {
             return this.registery
                 .get(adapter.name)
                 ?.getConnection(connectionParams)
         },
-        getMessages(adapter, connection) {
+        async getMessages(adapter, connection) {
             return this.registery.get(adapter.name)?.getMessages(connection)
+        },
+        async putMessages(adapter, connection, ...messages) {
+            return this.registery
+                .get(adapter.name)
+                ?.putMessages(connection, messages)
+        },
+        async closeConnection(adapter, connection) {
+            await this.registery.get(adapter.name)?.closeConnection(connection)
+            return
         },
     }
 }
