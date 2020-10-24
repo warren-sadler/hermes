@@ -4,7 +4,7 @@
 # Optional but simplifies NVM installation
 touch .bash_profile
 
-yum update
+yum update -y
 # Install git
 yum install -y git
 echo "--------------------------------------------------"
