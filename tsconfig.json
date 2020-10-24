@@ -20,5 +20,5 @@
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true
   },
-  "exclude": ["__test__", "dist"]
+  "exclude": ["__tests__", "dist"]
 }
