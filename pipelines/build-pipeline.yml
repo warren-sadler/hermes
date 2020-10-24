@@ -4,7 +4,7 @@ resources:
       type: git
       source:
           uri: https://github.com/warren-sadler/hermes.git
-          branch: feat/concourse-build
+          branch: master
 jobs:
     - name: compile-app
       plan:
