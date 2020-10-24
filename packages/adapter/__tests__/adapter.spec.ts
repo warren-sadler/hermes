@@ -27,7 +27,9 @@ describe('Adapters', () => {
     describe('Adapter Registery', () => {
         test('accessing adapters object via getAdapter', () => {
             const mockAdapter = Adapters.getAdapter(MockAdapter)
-            expect(mockAdapter!.name).toBeDefined()
+            if (mockAdapter) {
+                expect(mockAdapter.name).toBeDefined()
+            }
         })
     })
 })
