@@ -9,7 +9,7 @@ jobs:
     - name: compile-app
       plan:
           - get: source-code
-          - task: install-node-build-deps
+          - task: install-node-build-deps-and-build
             config:
                 platform: linux
                 image_resource:
@@ -18,25 +18,10 @@ jobs:
                         repository: amazonlinux
                 inputs:
                     - name: source-code
+                outputs:
+                    - name: image
                 run:
                     path: sh
                     args:
-                        - ./source-code/scripts/install.sh
-    - name: inspect-app
-      plan:
-          - get: source-code
-            passed: [compile-app]
-            trigger: true
-          - task: first-task
-            config:
-                platform: linux
-                image_resource:
-                    type: docker-image
-                    source:
-                        repository: amazonlinux
-                inputs:
-                    - name: source-code
-                run:
-                    path: find
-                    args: [.]
+                        - ./source-code/scripts/install-build.sh
 # fly -t h set-pipeline -c ./pipelines/test-pipeline.yml -p test-pipeline
