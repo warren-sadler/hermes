@@ -17,7 +17,8 @@
     "build:development": "webpack --mode=development",
     "build:production": "webpack --mode=production",
     "prerelease": "npm-run-all lint test",
-    "release": "standard-version"
+    "release": "standard-version",
+    "generate-docs": "typedoc --out docs src"
   },
   "keywords": [
     "event-processing",
@@ -63,6 +64,7 @@
     "terser-webpack-plugin": "^4.2.3",
     "ts-jest": "^26.4.2",
     "ts-loader": "^8.0.6",
+    "typedoc": "^0.19.2",
     "typescript": "^4.0.3",
     "webpack": "v4.44.2",
     "webpack-cli": "^4.1.0",
