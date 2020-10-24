@@ -14,7 +14,7 @@ export interface Adapter<ConnectionParams = unknown, Connection = unknown> {
 }
 
 interface AdapterRegistry<Adapter> {
-    registery: Map<symbol, Adapter>
+    readonly registery: Map<symbol, Adapter>
     getAdapter(adapter: Adapter): Adapter | undefined
 }
 
