@@ -1,4 +1,8 @@
 {
+  "private": true,
+  "workspaces": [
+    "packages/*"
+  ],
   "name": "hermes",
   "version": "1.0.0",
   "description": "Hermes Event Processor",
@@ -33,6 +37,9 @@
     }
   },
   "license": "MIT",
+  "dependencies": {
+    "@hermes/core": "1.0.0"
+  },
   "devDependencies": {
     "@commitlint/cli": "^11.0.0",
     "@commitlint/config-conventional": "^11.0.0",
