@@ -65,12 +65,14 @@ export const IbmmqAdapter: IAdapter<typeof IbmmqAdapterName> = {
         return this.connection as IbmmqConnection
     },
     //eslint-disable-next-line
-    async *getMessages([_, mqMessageHandlerObject]: IbmmqConnection) {
+    getMessages([_, mqMessageHandlerObject]: IbmmqConnection) {
         let messages: unknown[],
-            resolve: (val: unknown) => unknown,
+            resolve: (val: unknown[]) => unknown,
             reject: (val: unknown) => unknown
-        const init = (res: () => unknown, rej: () => unknown) =>
-            ([messages, resolve, reject] = [[], res, rej])
+        const init = (
+            res: (val: unknown[]) => unknown,
+            rej: (val: unknown) => unknown
+        ) => ([messages, resolve, reject] = [[], res, rej])
         let messagesAvailable: Promise<unknown[]> = new Promise(init)
         const mqMessageDefinition = new mq.MQMD()
         const mqGetMessageObject = new mq.MQGMO()
@@ -80,9 +82,7 @@ export const IbmmqAdapter: IAdapter<typeof IbmmqAdapterName> = {
             MQC.MQGMO_FAIL_IF_QUIESCING
         mqGetMessageObject.MatchOptions = MQC.MQMO_NONE
         mqGetMessageObject.WaitInterval = 10 * 1_000
-        mq.setTuningParameters({
-            getLoopPollTimeMs: 100,
-        })
+        mq.setTuningParameters({ getLoopPollTimeMs: 100 })
         mq.Get(
             mqMessageHandlerObject,
             mqMessageDefinition,
@@ -108,10 +108,14 @@ export const IbmmqAdapter: IAdapter<typeof IbmmqAdapterName> = {
         )
         return {
             [Symbol.asyncIterator]: async function* () {
-                for (;;) {
-                    const messages = await messagesAvailable
-                    messagesAvailable = new Promise(init)
-                    yield* messages
+                try {
+                    for (;;) {
+                        const messages = await messagesAvailable
+                        messagesAvailable = new Promise(init)
+                        yield* messages
+                    }
+                } catch (error) {
+                    throw error
                 }
             },
         }
@@ -121,27 +125,31 @@ export const IbmmqAdapter: IAdapter<typeof IbmmqAdapterName> = {
         [_, mqMessageHandlerObject]: IbmmqConnection,
         ...messages: number[]
     ): Promise<boolean> {
-        const mqMessageDefinition = new mq.MQMD()
-        const mqPutOptions = new mq.MQPMO()
-        mqPutOptions.Options =
-            MQC.MQPMO_NO_SYNCPOINT |
-            MQC.MQPMO_NEW_MSG_ID |
-            MQC.MQPMO_NEW_CORREL_ID
         for await (const msg of messages) {
-            await mq.PutPromise(
-                mqMessageHandlerObject,
-                mqMessageDefinition,
-                mqPutOptions,
-                msg
-            )
+            const mqMessageDefinition = new mq.MQMD()
+            const mqPutOptions = new mq.MQPMO()
+            mqPutOptions.Options =
+                MQC.MQPMO_NO_SYNCPOINT |
+                MQC.MQPMO_NEW_MSG_ID |
+                MQC.MQPMO_NEW_CORREL_ID
+            try {
+                await mq.PutPromise(
+                    mqMessageHandlerObject,
+                    mqMessageDefinition,
+                    mqPutOptions,
+                    msg
+                )
+            } catch (error) {
+                throw error
+            }
         }
         return true
     },
     async closeConnection([
         mqConnectionHandler,
-        mqClientChannelDefiniton,
+        mqClientChannelDefinition,
     ]: IbmmqConnection): Promise<boolean> {
-        await mq.ClosePromise(mqClientChannelDefiniton, 0)
+        await mq.ClosePromise(mqClientChannelDefinition, 0)
         await mq.DiscPromise(mqConnectionHandler)
         return true
     },
