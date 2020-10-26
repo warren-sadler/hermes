@@ -9,7 +9,7 @@
   "main": "index.js",
   "scripts": {
     "lint": "eslint --fix",
-    "test": "jest",
+    "test": "lerna run jest",
     "test:watch": "npm t -- --watch",
     "test:coverage": "npm t -- --collectCoverage",
     "prebuild:development": "rimraf ./dist",
