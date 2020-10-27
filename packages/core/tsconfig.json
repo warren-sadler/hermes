@@ -5,7 +5,8 @@
     "baseUrl": ".",
     "declaration": true,
     "rootDir": "src",
-    "outDir": "lib"
+    "outDir": "lib",
+    "skipLibCheck": true,
   },
   "include": ["src"],
   "exclude": ["__tests__","lib"]

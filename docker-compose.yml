@@ -1,30 +1,40 @@
 version: '3'
 
 services:
+  # region ibmmq
+  ibmmq:
+    image: ibmcom/mq
+    environment:
+      LICENSE: "accept"
+      MQ_QMGR_NAME: "QM1"
+    ports:
+      - 1414:1414
+      - 9443:9443
+  # endregion ibmmq
   # region concourse
-  concourse-db:
-    image: postgres
-    environment:
-      POSTGRES_DB: concourse
-      POSTGRES_PASSWORD: concourse_pass
-      POSTGRES_USER: concourse_user
-      PGDATA: /database
+  # concourse-db:
+  #   image: postgres
+  #   environment:
+  #     POSTGRES_DB: concourse
+  #     POSTGRES_PASSWORD: concourse_pass
+  #     POSTGRES_USER: concourse_user
+  #     PGDATA: /database
 
-  concourse:
-    image: concourse/concourse
-    command: quickstart
-    privileged: true
-    depends_on: [concourse-db]
-    ports: ["8080:8080"]
-    environment:
-      CONCOURSE_POSTGRES_HOST: concourse-db
-      CONCOURSE_POSTGRES_USER: concourse_user
-      CONCOURSE_POSTGRES_PASSWORD: concourse_pass
-      CONCOURSE_POSTGRES_DATABASE: concourse
-      CONCOURSE_EXTERNAL_URL: http://localhost:8080
-      CONCOURSE_ADD_LOCAL_USER: test:test
-      CONCOURSE_MAIN_TEAM_LOCAL_USER: test
-      CONCOURSE_WORKER_BAGGAGECLAIM_DRIVER: overlay
-      CONCOURSE_CLIENT_SECRET: Y29uY291cnNlLXdlYgo=
-      CONCOURSE_TSA_CLIENT_SECRET: Y29uY291cnNlLXdvcmtlcgo=
+  # concourse:
+  #   image: concourse/concourse
+  #   command: quickstart
+  #   privileged: true
+  #   depends_on: [concourse-db]
+  #   ports: ["8080:8080"]
+  #   environment:
+  #     CONCOURSE_POSTGRES_HOST: concourse-db
+  #     CONCOURSE_POSTGRES_USER: concourse_user
+  #     CONCOURSE_POSTGRES_PASSWORD: concourse_pass
+  #     CONCOURSE_POSTGRES_DATABASE: concourse
+  #     CONCOURSE_EXTERNAL_URL: http://localhost:8080
+  #     CONCOURSE_ADD_LOCAL_USER: test:test
+  #     CONCOURSE_MAIN_TEAM_LOCAL_USER: test
+  #     CONCOURSE_WORKER_BAGGAGECLAIM_DRIVER: overlay
+  #     CONCOURSE_CLIENT_SECRET: Y29uY291cnNlLXdlYgo=
+  #     CONCOURSE_TSA_CLIENT_SECRET: Y29uY291cnNlLXdvcmtlcgo=
   # endregion concoure
