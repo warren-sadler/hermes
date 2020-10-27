@@ -1,3 +1,7 @@
+# Ibmmq client
+client/
+results.txt
+
 # Logs
 logs
 *.log
